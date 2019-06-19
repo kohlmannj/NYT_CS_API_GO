@@ -396,15 +396,14 @@ var bottomSectionID = "#bottom_section"
 var pageSectionID = '#page_type_data'
 var tableAllSectionID = "#all_section_data"
 
+var topSectionTitle = "Top Section"
+var bottomSectionTitle = "Bottom Section"
+var pageSectionTitle = "Page Type Data"
+
 var topSectionJSONPath = "https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order?order_id=2521420541&order_by=section&sort_by=DESC&limit=3"
 var bottomSectionJSONPath = "https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order?order_id=2521420541&order_by=section&sort_by=ASC&limit=3"
 var pageSectionJSONPath = "https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order?order_id=2480100899&order_by=cat_type&sort_by=DESC&limit=10"
 var allSectionJSONPath = "https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order?order_id=2521420541&order_by=section&sort_by=DESC&limit=10"
-
-
-var topSectionTitle = "Top Section"
-var bottomSectionTitle = "Bottom Section"
-var pageSectionTitle = "Page Type Data"
 
 var orderOverAllPath = "https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order?order_id=2521420541&order_by=order_overall&sort_by=DESC&limit=10"
 var pageOrderOverAll = "https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order?order_id=2480100899&order_by=order_overall&sort_by=DESC&limit=10"
@@ -413,88 +412,6 @@ var topLineID = "overAllTop"
 var bottomLineID = "overAllBottom"
 var pageLineID = "pageOverAll"
 
-// var svgTopSection = createSvg(topSectionID, topSectionJSONPath, topSectionTitle, orderOverAllPath, topLineID)
-// var svgBottomSection = createSvg(bottomSectionID, bottomSectionJSONPath, bottomSectionTitle, orderOverAllPath, bottomLineID)
-// var svgPageType = createSvg(pageSectionID, pageSectionJSONPath, pageSectionTitle, pageOrderOverAll, pageLineID)
-// var tableAllSection = createTable(tableAllSectionID, allSectionJSONPath, orderOverAllPath)
-
-// function withAPICreateSvg(sectionID, barJSONPath, orderOverAllJSONPath, sectionTitle, lineID) {
-
-//      Promise.all([
-//         fetch(barJSONPath).then(response => response.json()),
-//         fetch(orderOverAllJSONPath).then(response => response.json())
-//     ])
-//         .then((values) => {
-//             console.log(values[0], "the first json object")
-//             console.log(values[1], "the second json object")
-//             //json response
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         });
-
-// }
-
-// withAPICreateSvg(topSectionID, topSectionJSONPath, topSectionTitle, topSectionJSONPath, topLineID)
-
-
-
-// Promise.all([
-//     fetch(topSectionJSONPath).then(response => response.json()),
-//     fetch(orderOverAllPath).then(response => response.json())
-// ])
-//     .then((values) => {
-//         var svgTopSection = createSvg(topSectionID, values[0], topSectionTitle, values[1], topLineID)
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
-
-
-// Promise.all([
-//     fetch(bottomSectionJSONPath).then(response => response.json()),
-//     fetch(orderOverAllPath).then(response => response.json())
-// ])
-//     .then((values) => {
-//         var svgBottomSection = createSvg(bottomSectionID, values[0], bottomSectionTitle, values[1], bottomLineID)
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
-
-// Promise.all([
-//     fetch(pageSectionJSONPath).then(response => response.json()),
-//     fetch(pageOrderOverAll).then(response => response.json())
-// ])
-//     .then((values) => {
-//         var svgPageType = createSvg(pageSectionID, values[0], pageSectionTitle, values[1], pageLineID)
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
-
-// Promise.all([
-//     fetch(allSectionJSONPath).then(response => response.json()),
-//     fetch(orderOverAllPath).then(response => response.json())
-// ])
-//     .then((values) => {
-//         var tableAllSection = createTable(tableAllSectionID, values[0], values[1])
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
-
-
-// var request1 = new Request('https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order');
-// var request2 = new Request('https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/line')
-
-// var topSectionJSONPath = 'https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order'
-// var orderOverJSONPath = 'https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/line'
-
-// console.log("request test", request1)
-
-
-// var test = 'https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order'
 async function withAPICreateSvg(sectionID, sectionJSONPath, sectionTitle, orderOverAllJSONPath, lineID){
 
     await Promise.all([
@@ -507,7 +424,7 @@ async function withAPICreateSvg(sectionID, sectionJSONPath, sectionTitle, orderO
         });
 }
 
-// var test = 'https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order'
+
 async function withAPICreateTable(sectionID, sectionJSONPath, orderOverAllJSONPath){
 
     await Promise.all([
@@ -521,24 +438,7 @@ async function withAPICreateTable(sectionID, sectionJSONPath, orderOverAllJSONPa
 }
 
 
-
 var svgTopSection = withAPICreateSvg(topSectionID, topSectionJSONPath, topSectionTitle, orderOverAllPath, topLineID)
 var svgBottomSection = withAPICreateSvg(bottomSectionID, bottomSectionJSONPath, bottomSectionTitle, orderOverAllPath, bottomLineID)
 var svgPageType = withAPICreateSvg(pageSectionID, pageSectionJSONPath, pageSectionTitle, orderOverAllPath, pageLineID)
 var tableAllSection = withAPICreateTable(tableAllSectionID, allSectionJSONPath, orderOverAllPath)
-
-// var request3 = new Request('https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/order');
-// var request4 = new Request('https://campaignscope-data-api-dot-nyt-adtech-dev.appspot.com/cs/line')
-
-// Promise.all([
-//     fetch(request3).then(response => response.json()),
-//     fetch(request4).then(response => response.json())
-// ])
-//     .then((values) => {
-//         console.log(values[0], "the first json object")
-//         console.log(values[1], "the second json object")
-//         //json response
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
