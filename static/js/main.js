@@ -30,19 +30,8 @@ var y = d3.scaleLinear()
  */
 
 async function createSvg(divElementID, dimensionLevelJSONPath, barChartTitle, orderOverAllJSONPath, lineID) {
-
-    // renderJSON(path, svgSection, sectionTitle)
-
     var data = await dimensionLevelJSONPath;
-    // console.log(data, "for the test!!!!!!!!!")
-    // console.log(data[0], "first object")
-
-    // console.log("myJsonFromAPI", myJson)
-
-
     var countDataLength = 0
-    // Clean data
-
 
     // the most important is the data is a json object !!!!!!!!!!!!!
     data.forEach(d => {
@@ -60,12 +49,13 @@ async function createSvg(divElementID, dimensionLevelJSONPath, barChartTitle, or
 
 
         d.Dimension_CTR = +d.Dimension_CTR;
-        if (d.hasOwnProperty('Industry_CTR')) {
+        if(d.Industry_CTR != null){
+        // if (d.hasOwnProperty('Industry_CTR')) {
             d.Industry_CTR = +d.Industry_CTR;
-            
         }
         else {
-            d["Industry_CTR"] = "0";
+            d.Industry_CTR = 0
+            // d["Industry_CTR"] = "0";
         }
     });
 
@@ -252,9 +242,6 @@ async function addOrderOverAll(orderOverAllJSONPath, svgSection, lineID, width) 
 
     var data = await orderOverAllJSONPath[0]
 
-
-
-
     // console.log("test for data order over all", data)
 
     data.Dimension_CTR = +data.Dimension_CTR;
@@ -317,6 +304,8 @@ async function createTable(divElementID, dimensionLevelPath, orderOverAllPath) {
         var dimensionData = await dimensionLevelPath
         var orderOverAll = await orderOverAllPath[0]
 
+        console.log("dimensionData", dimensionData)
+
 
         // console.log(files[0])
         // for orderOverallCTR is the dimension level? or Industry Level?
@@ -326,6 +315,8 @@ async function createTable(divElementID, dimensionLevelPath, orderOverAllPath) {
 
         var res = []
         dimensionData.forEach(d => {
+
+            console.log(d, "before")
 
             var versIndustryCTR = 0
 
@@ -339,6 +330,8 @@ async function createTable(divElementID, dimensionLevelPath, orderOverAllPath) {
             d.Dimension_CTR = (+d.Dimension_CTR * 100).toFixed(2);
 
             var versOrderOverAll = ((d.Dimension_CTR - orderOverAll) / orderOverAll).toFixed(2)
+
+            console.log(d, "after")
 
             res.push([d.dimension_details, d.Dimension_CTR + "%", orderOverAll.toFixed(2) + "%", versOrderOverAll + "%", d.Industry_CTR + "%", versIndustryCTR + "%"])
         })
@@ -391,6 +384,62 @@ async function createTable(divElementID, dimensionLevelPath, orderOverAllPath) {
 }
 
 
+
+/**
+ * 
+ *          Function For Call API to Creat Bar Chart SVG
+ * 
+    *          Parameters:
+    *              divElementID : HTML div element ID
+    *              dimensionLevelJSONPath : JSON Path for the barchart data
+    *              barChartTitle : Title for the bar chart
+    *              orderOverAllJSONPath: JSON Path for the order_over_All data
+    *              lineID : line ID for the standerd order_over_all data
+ *                  
+ * 
+ */
+
+
+async function withAPICreateSvg(divElementID, dimensionLevelJSONPath, barChartTitle, orderOverAllJSONPath, lineID){
+
+    await Promise.all([
+        fetch(dimensionLevelJSONPath).then(response => response.json()),
+        fetch(orderOverAllJSONPath).then(response => response.json())
+    ])
+        .then((values) => createSvg(divElementID, values[0], barChartTitle, values[1], lineID))
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+
+
+/**
+ * 
+ *          Function For Call API to Create Table
+ * 
+    *          Parameters:
+    *              divElementID : HTML div element ID
+    *              dimensionLevelPath: JSON Path for the dimension level data
+    *              orderOverAllPath: JSON Path for the order_over_All data
+ *                  
+ * 
+ */
+
+
+async function withAPICreateTable(divElementID, dimensionLevelPath, orderOverAllPath){
+
+    await Promise.all([
+        fetch(dimensionLevelPath).then(response => response.json()),
+        fetch(orderOverAllPath).then(response => response.json())
+    ])
+        .then((values) => createTable(divElementID, values[0], values[1]))
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+
 var topSectionID = "#top_section"
 var bottomSectionID = "#bottom_section"
 var pageSectionID = '#page_type_data'
@@ -411,32 +460,6 @@ var pageOrderOverAll = "https://campaignscope-data-api-dot-nyt-adtech-dev.appspo
 var topLineID = "overAllTop"
 var bottomLineID = "overAllBottom"
 var pageLineID = "pageOverAll"
-
-async function withAPICreateSvg(sectionID, sectionJSONPath, sectionTitle, orderOverAllJSONPath, lineID){
-
-    await Promise.all([
-        fetch(sectionJSONPath).then(response => response.json()),
-        fetch(orderOverAllJSONPath).then(response => response.json())
-    ])
-        .then((values) => createSvg(sectionID, values[0], sectionTitle, values[1], lineID))
-        .catch((err) => {
-            console.log(err);
-        });
-}
-
-
-async function withAPICreateTable(sectionID, sectionJSONPath, orderOverAllJSONPath){
-
-    await Promise.all([
-        fetch(sectionJSONPath).then(response => response.json()),
-        fetch(orderOverAllJSONPath).then(response => response.json())
-    ])
-        .then((values) => createTable(sectionID, values[0], values[1]))
-        .catch((err) => {
-            console.log(err);
-        });
-}
-
 
 var svgTopSection = withAPICreateSvg(topSectionID, topSectionJSONPath, topSectionTitle, orderOverAllPath, topLineID)
 var svgBottomSection = withAPICreateSvg(bottomSectionID, bottomSectionJSONPath, bottomSectionTitle, orderOverAllPath, bottomLineID)
